@@ -3,13 +3,14 @@ using System.Text;
 using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Extensions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
-public class AccountController : BaseAPIController
+public class AccountController : BaseApiController
 {
     
     private readonly AppDbContext _context;
@@ -53,13 +54,7 @@ public class AccountController : BaseAPIController
         
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            var response = new UserResponseDto()
-            {
-                Email = user.Email,
-                Id = user.Id,
-                DisplayName = user.DisplayName,
-                Token = _tokenService.CreateToken(user)
-            };
+            var response = user.ToDto(_tokenService);
             return Ok(response);
         }
         catch (Exception e)
@@ -106,14 +101,7 @@ public class AccountController : BaseAPIController
         {
             if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Email or password incorrect");
         }
-
-        var response = new UserResponseDto()
-        {
-            Email = user.Email,
-            Id = user.Id,
-            DisplayName = user.DisplayName,
-            Token = _tokenService.CreateToken(user)
-        };
+        var response = user.ToDto(_tokenService);
         return Ok(response);
     }
 }
