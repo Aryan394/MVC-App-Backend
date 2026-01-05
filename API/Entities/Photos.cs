@@ -10,4 +10,5 @@ public class Photos
     
     // Navigation Property
     public Member Member { get; set; } = null!;
+    public Guid MemberId { get; set; } 
 }
