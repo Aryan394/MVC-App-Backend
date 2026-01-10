@@ -1,5 +1,6 @@
 using System.Text;
 using API.Data;
+using API.Helpers;
 using API.Interfaces;
 using API.Middlewares;
 using API.Services;
@@ -17,7 +18,9 @@ builder.Services.AddDbContext<AppDbContext>(opt => // adding SQL Server db servi
         {
             opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
         });
+builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -31,6 +34,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddOpenApi();
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.
+    GetSection("CloudinarySettings"));
 
 var app = builder.Build();
 
