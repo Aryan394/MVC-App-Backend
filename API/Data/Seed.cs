@@ -9,9 +9,9 @@ namespace API.Data;
 
 public class Seed
 {
-    public static async Task SeedUsers(AppDbContext _context)
+    public static async Task SeedUsers(AppDbContext context)
     {
-        if (await _context.Users.AnyAsync()) return;
+        if (await context.Users.AnyAsync()) return;
         var memberData = await File.ReadAllTextAsync("Data/UserSeedData.json");
         var members = JsonSerializer.Deserialize<List<SeedUserDto>>(memberData);
         if (members == null || members.Count == 0)
@@ -47,8 +47,8 @@ public class Seed
                 Url = member.ImageUrl,
                 MemberId = member.Id,
             });
-            _context.Users.Add(user);
+            context.Users.Add(user);
         }
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync();
     }
 }

@@ -21,22 +21,32 @@ public class PhotoService : IPhotoService
 
     public async Task<ImageUploadResult> UploadPhotoAsync(IFormFile file)
     {
-        var uploadResult = new ImageUploadResult();
-        if (file.Length > 0)
+        try
         {
-            await using var stream = file.OpenReadStream();
-            var uploadParams = new ImageUploadParams
+            var uploadResult = new ImageUploadResult();
+            if (file.Length > 0)
             {
-                File = new FileDescription(file.FileName, stream),
-                Transformation = new Transformation()
-                    .Height(500)
-                    .Width(500)
-                    .Crop("fill")
-                    .Gravity("face")
-            };
-            uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                await using var stream = file.OpenReadStream();
+                var uploadParams = new ImageUploadParams
+                {
+                    File = new FileDescription(file.FileName, stream),
+                    Transformation = new Transformation()
+                        .Height(500)
+                        .Width(500)
+                        .Crop("fill")
+                        .Gravity("face")
+                };
+                uploadResult = await _cloudinary.UploadAsync(uploadParams);
+            }
+
+            return uploadResult;
         }
-        return uploadResult;
+        catch (Exception e)
+        {
+            throw new Exception("Error uploading photo", e);
+        }
+
+
     }
 
     public async Task<DeletionResult> DeletePhotoAsync(string publicId)

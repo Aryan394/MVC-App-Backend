@@ -17,6 +17,7 @@ public class TokenService(IConfiguration config) : ITokenService
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
         var claims = new List<Claim>
         {
+            new Claim("Id", user.Id.ToString()), 
             new(ClaimTypes.Email, user.Email),
             new(ClaimTypes.NameIdentifier, user.DisplayName),
         };
@@ -24,7 +25,7 @@ public class TokenService(IConfiguration config) : ITokenService
         var tokenDescriptor = new SecurityTokenDescriptor()
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(60),
+            Expires = DateTime.UtcNow.AddMinutes(600),
             SigningCredentials = creds
         };
 

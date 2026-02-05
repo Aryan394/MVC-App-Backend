@@ -8,6 +8,7 @@ public class SeedUserDto
     public required string Email {get; set;}
     public required DateOnly DateOfBirth {get; set;}
     [MaxLength(200)]
+    [Required]
     public string? ImageUrl {get; set;}
     [MaxLength(50)]
     public required string FullName {get; set;}

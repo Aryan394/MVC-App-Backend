@@ -6,9 +6,11 @@ namespace API.Entities;
 public class Photos
 {
     [MaxLength(200)]
-    public required string Id { get; set; }
+    public string? Id { get; set; }
     [MaxLength(200)]
     public required string Url { get; set; }
+    [MaxLength(100)]
+    public string? PublicId { get; set; }
     
     // Navigation Property
     [JsonIgnore]
